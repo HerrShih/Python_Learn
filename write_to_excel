@@ -1,0 +1,41 @@
+
+from lxml import etree
+import xlsxwriter
+text = '''
+<div>
+    <ul>
+         <li class="item-0"><a href="link1.html">first item</a></li>
+         <li class="item-1"><a href="link2.html">second item</a></li>
+         <li class="item-inactive"><a href="link3.html">third item</a></li>
+         <li class="item-1"><a href="link4.html">fourth item</a></li>
+         <li class="item-0"><a href="link5.html">fifth item</a>
+    </ul>
+     <ul>
+        <li class="item-0"><a href="link1.html">1</a></li>
+        <li class="item-1"><a href="link2.html">测试1</a></li>
+        <li class="item-inactive"><a href="link3.html">测试2</a></li>
+        <li class="item-1"><a href="link4.html">2017-08-12</a></li>
+        <li class="item-0"><a href="link5.html">成都市</a>
+    </ul>
+
+ </div>
+'''
+
+workbook = xlsxwriter.Workbook('text1.xlsx')
+worksheet = workbook.add_worksheet()
+row = 0
+col = 0
+a = 0
+html = etree.HTML(text)
+result_temp = html.xpath('//li/a')
+for i in range(len(result_temp)):
+    worksheet.write(row,col,result_temp[a].text)
+    col += 1
+    a += 1
+    if col % 5==0 :
+        row += 1
+        col = 0
+workbook.close()
+
+
+
