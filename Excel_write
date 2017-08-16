@@ -1,0 +1,2012 @@
+
+from lxml import etree
+import xlsxwriter
+import re
+text = '''
+<head><style type="text/css">.ng-animate.item:not(.left):not(.right){-webkit-transition:0s ease-in-out left;transition:0s ease-in-out left}</style><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>后端管理系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/css/cloud-admin.css">
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/css/themes/default.css" id="skin-switcher">
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/css/responsive.css">	
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/js/select2/select2.min.css">	
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/js/jquery-ui-1.10.3.custom/css/custom-theme/jquery-ui-1.10.3.custom.min.css">
+	<!-- UNIFORM -->
+	<link rel="stylesheet" type="text/css" href="/operate/opAjax/js/uniform/css/uniform.default.min.css">
+	
+	<link rel="stylesheet" type="text/css" href="/operate/jquery/iviewermaster/jquery.iviewer.css">
+
+	<script type="text/javascript">
+		var taskId = 'undefined';
+		var caseId = 'C17815190734466qxrne';
+		var wfCaseId = 'W17815190734500xhTbu';
+		var activityId = 'undefined';
+		var appId = 'B17815190734466zYpLi';
+		var type = 'user';
+		var oper = '';
+	</script>
+	<style>
+		.mytd{
+			max-width: 200px;
+			word-wrap: break-word;
+		}
+	</style>
+</head>
+<body ng-app="ngHomeWindow" class="ng-scope">
+	<!-- HEADER -->
+	<header class="navbar clearfix navbar-fixed-top" id="header">
+		
+
+
+
+
+
+
+    
+    <script type="text/javascript">
+        var contextPath = '/operate';
+        //alert(contextPath);
+    </script>
+    <style>
+        #header{
+            z-index: 6001;
+        }
+    </style>
+
+
+<div class="container ng-scope" ng-controller="roleController">
+    <div class="navbar-brand">
+        <!-- COMPANY LOGO -->
+        <a href="index.html">
+            <!--<img src="img/logo/logo.png" alt="Cloud Admin Logo" class="img-responsive" height="30" width="120">-->
+        </a>
+        <!-- /COMPANY LOGO -->
+        <!-- TEAM STATUS FOR MOBILE -->
+        <div class="visible-xs">
+            <a href="#" class="team-status-toggle switcher btn dropdown-toggle">
+                <i class="fa fa-users"></i>
+            </a>
+        </div>
+        <!-- /TEAM STATUS FOR MOBILE -->
+        <!-- SIDEBAR COLLAPSE -->
+        <div id="sidebar-collapse" class="sidebar-collapse btn">
+            <i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars"></i>
+        </div>
+        <!-- /SIDEBAR COLLAPSE -->
+    </div>
+    <!-- NAVBAR LEFT -->
+    <ul class="nav navbar-nav pull-left hidden-xs" id="navbar-left">
+        <li class="dropdown">
+            <a href="#" class="team-status-toggle dropdown-toggle tip-bottom ng-binding" data-original-title="" title="">2017-08-15</a>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" href="/operate/basic/User/homeOp.jsp">首页</a>
+        </li>
+    </ul>
+    <!-- /NAVBAR LEFT -->
+    <!-- BEGIN TOP NAVIGATION MENU -->
+
+    <ul class="nav navbar-nav pull-right">
+        <!-- BEGIN NOTIFICATION DROPDOWN -->
+        <li class="dropdown" id="header-status">
+            <a href="" ng-click="changeUserStatus(user)" class="team-status-toggle dropdown-toggle tip-bottom" data-original-title="" title="">
+                <span class="fa ng-binding">坐席状态:离开</span></a>
+        </li>
+
+        <li class="dropdown" id="header-role">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="fa">用户角色</span>
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu notification partU">
+                <!-- ngRepeat: role in roles --><li ng-repeat="role in roles" class="ng-scope">
+                    <a href="" ng-click="changeRole(role)" class="ng-binding">
+                        <i class="fa fa-lock" ng-show="role.roleId==currRoleId.roleId"></i> 应急管理岗</a>
+                </li><!-- end ngRepeat: role in roles -->
+            </ul>
+        </li>
+        <!-- END NOTIFICATION DROPDOWN -->
+        <!-- BEGIN INBOX DROPDOWN -->
+        <li class="dropdown" id="header-message">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="fa">消息</span>
+                <!--<span class="badge">2</span> -->
+            </a>
+            <ul class="dropdown-menu inbox">
+                <li class="dropdown-title">
+                    <span><i class="fa fa-envelope-o"></i> 发送新消息</span>
+                    <span class="pull-right" title="Compose message">
+                        <i class="fa fa-pencil-square-o" ng-click="showSendMessageyWin('#sendMessageWin')"></i>
+                    </span>
+                </li>
+                <li class="footer">
+                    <a href="#" ng-click="queryMsgs()">查看所有消息列表 <i class="fa fa-arrow-circle-right"></i></a>
+                </li>
+            </ul>
+        </li>
+        <!-- END INBOX DROPDOWN -->
+        <!-- BEGIN TODO DROPDOWN -->
+        <!--
+        <li class="dropdown" id="header-tasks">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="fa">即将过期任务数</span>
+            <span class="badge">3</span>
+            </a>
+
+        </li>
+         -->
+        <!-- END TODO DROPDOWN -->
+        <!-- BEGIN USER LOGIN DROPDOWN -->
+        <li class="dropdown" id="header-user">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-users"></i>
+                <span class="username ng-binding">yingjiguanli</span>
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="/operate/basic/User/changePassword.jsp">
+                        <i class="fa fa-cog"></i> 密码修改</a>
+                </li>
+                <li><a href="/operate/Login/logout.do"><i class="fa fa-power-off"></i> 退出登录</a></li>
+            </ul>
+        </li>
+        <!-- END USER LOGIN DROPDOWN -->
+    </ul>
+    <!-- END TOP NAVIGATION MENU -->
+
+    <!-- 消息发送  -->
+    <div class="col-md-8 popWin massageWin" id="sendMessageWin" style="display: none;">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <button type="button" class="close" ng-click="closeMessageWin('#sendMessageWin');">×</button>
+                <h4 class="text-info"><i class="fa fa-envelope"></i> <b>消息发送</b></h4>
+            </div>
+            <div class="box-body">
+                <form class="form-horizontal  ng-pristine ng-valid" action="#">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">消息标题</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control ng-pristine ng-untouched ng-valid" ng-model="msgForm.msgTitle" ng-keyup="queryTask()" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">消息内容</label>
+
+                        <div class="col-md-8">
+                            <textarea class="form-control ng-pristine ng-untouched ng-valid" rows="3" ng-model="msgForm.msgBody"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">发送模式</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control ng-pristine ng-untouched ng-valid" ng-model="msgForm.sendMethod" ng-change="changeMethod()"><option value="? object:null ?"></option>
+                                <option value="role"> 发送给角色组</option>
+                                <option value="user">发送给用户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">发送角色</label>
+
+                        <div class="col-md-8">
+                            <!-- ngRepeat: r in msgRoles -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">发送用户</label>
+
+                        <div class="col-md-8">
+                            <!-- ngRepeat: u in msgUsers -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8 text-pink">
+                            <h5><strong class="ng-binding"></strong></h5>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- end box-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="sendMsg(msgRoles,msgUsers)" ng-disabled="msgForm.disableSendButton">发送
+                </button>
+                <button type="button" class="btn btn-primary w150" ng-click="closeMessageWin('#sendMessageWin');">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	</header>	 
+	<!-- PAGE -->
+	<section id="page">
+		<div id="sidebar" class="sidebar">
+			
+
+
+
+
+
+
+
+<script type="text/javascript">
+	var menue_module = 'ApprovalBizQuery';
+	var menue_component = 'queryOrders';
+	var menue_flag = '';
+	if(menue_flag == '1'){
+		menue_module = '';
+		menue_component = '';
+	}
+	
+	var component = '';
+	var module = ''; 
+    </script>
+
+
+
+<div class="sidebar-menu nav-collapse ng-scope" ng-controller="componentController">
+    <ul>
+        <li class="active">
+            <a href="#">
+                <i class="fa fa-tachometer fa-fw"></i>
+                <span class="menu-text ng-binding"> [应急管理岗] 工作区域</span>
+                <span class="selected"></span>
+            </a>
+        </li>
+        <!--<li class="has-sub">
+								<a href="javascript:;" class="">
+								<i class="fa fa-file-text fa-fw"></i><span class="menu-text">test</span>
+									<span class="arrow"></span>
+								</a>
+								<ul class="sub">
+									<li ><a class="" href="/operate/aaa"><span class="sub-menu-text">test111</span></a></li>
+								</ul>
+							</li>-->
+        <!-- ngRepeat: bean in userModules --><li id="mod_Rule" class="has-sub ng-scope" ng-repeat="bean in userModules" on-finish-render="">
+            <a href="javascript:;" class="has-sub_a">
+                <i class="fa fa-file-text fa-fw"></i>
+                <span class="menu-text ng-binding">规则管理</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <!-- ngRepeat: component in bean.components --><li id="com_Rule" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/rule/RuleSetTypeInfo/layout.do?mainTainType=editRules&amp;module=Rule&amp;component=Rule&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">编辑规则</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_RuleApproval" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/rule/RuleSetTypeInfo/layout.do?mainTainType=approveRules&amp;module=Rule&amp;component=RuleApproval&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">规则审批</span></a>
+                </li><!-- end ngRepeat: component in bean.components -->
+            </ul>
+        </li><!-- end ngRepeat: bean in userModules --><li id="mod_QueryService" class="has-sub ng-scope" ng-repeat="bean in userModules" on-finish-render="">
+            <a href="javascript:;" class="has-sub_a">
+                <i class="fa fa-file-text fa-fw"></i>
+                <span class="menu-text ng-binding">客户服务</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <!-- ngRepeat: component in bean.components --><li id="com_CustQuery" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OpCustQuery/list.jsp?comCode=OpCustQuery&amp;module=QueryService&amp;component=CustQuery&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">信维管理</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_ModifyCust" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OpModifyCust/list.jsp?comCode=OpCustQuery&amp;module=QueryService&amp;component=ModifyCust&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">修改客群</span></a>
+                </li><!-- end ngRepeat: component in bean.components -->
+            </ul>
+        </li><!-- end ngRepeat: bean in userModules --><li id="mod_ApprovalAssignMgmt" class="has-sub ng-scope" ng-repeat="bean in userModules" on-finish-render="">
+            <a href="javascript:;" class="has-sub_a">
+                <i class="fa fa-file-text fa-fw"></i>
+                <span class="menu-text ng-binding">派单管理</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <!-- ngRepeat: component in bean.components --><li id="com_OrderDistribute" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OrderDistribute/list.jsp?comCode=OrderDistribute&amp;module=ApprovalAssignMgmt&amp;component=OrderDistribute&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">派单设置</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_GroupPattern" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/CmTask/list.jsp?comCode=CmTask&amp;module=ApprovalAssignMgmt&amp;component=GroupPattern&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">角色组间任务调整</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_UserPattern" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/CmTask/list2.jsp?&amp;module=ApprovalAssignMgmt&amp;component=UserPattern&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">用户间任务调整</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_BatchTransfer" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/BatchTransfer/list.jsp?&amp;module=ApprovalAssignMgmt&amp;component=BatchTransfer&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">批量转件</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_ManualDistributeCase" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/ManualDistributeCase/list.jsp?comCode=ManualDistributeCase&amp;module=ApprovalAssignMgmt&amp;component=ManualDistributeCase&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">人工派单</span></a>
+                </li><!-- end ngRepeat: component in bean.components -->
+            </ul>
+        </li><!-- end ngRepeat: bean in userModules --><li id="mod_CaseManage" class="has-sub ng-scope" ng-repeat="bean in userModules" on-finish-render="">
+            <a href="javascript:;" class="has-sub_a">
+                <i class="fa fa-file-text fa-fw"></i>
+                <span class="menu-text ng-binding">业务处理</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <!-- ngRepeat: component in bean.components --><li id="com_processRuntime" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OpProcessRuntime/list.jsp?comCode=OpProcessRuntime&amp;module=CaseManage&amp;component=processRuntime&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">审批任务处理</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_riskTask" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OpRiskTask/list.jsp?comCode=OpRiskTask&amp;module=CaseManage&amp;component=riskTask&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">风险任务处理</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_WfCaseUnlocked" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/WfTaskUnlocked/query.jsp?comCode=WfTaskUnlocked&amp;module=CaseManage&amp;component=WfCaseUnlocked&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">工单解锁</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_ClearCommitment" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/ClearCommitment/query.jsp?&amp;module=CaseManage&amp;component=ClearCommitment&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">修改拒绝代码</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_ForceRestart" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/OpQueryService/query.jsp?comCode=OpProcessRuntime&amp;module=CaseManage&amp;component=ForceRestart&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">重新发起申请流程</span></a>
+                </li><!-- end ngRepeat: component in bean.components -->
+            </ul>
+        </li><!-- end ngRepeat: bean in userModules --><li id="mod_ApprovalBizQuery" class="has-sub ng-scope open" ng-repeat="bean in userModules" on-finish-render="">
+            <a href="javascript:;" class="has-sub_a">
+                <i class="fa fa-file-text fa-fw"></i>
+                <span class="menu-text ng-binding">业务查询</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub" style="display: block;">
+                <!-- ngRepeat: component in bean.components --><li id="com_queryOrders" ng-repeat="component in bean.components" class="ng-scope" style="background:#F4F4F4;">
+				     <a class="" href="/operate/basic/OpQueryService/query.jsp?comCode=OpProcessRuntime&amp;module=ApprovalBizQuery&amp;component=queryOrders&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">工单查询</span></a>
+                </li><!-- end ngRepeat: component in bean.components --><li id="com_riskTaskQuery" ng-repeat="component in bean.components" class="ng-scope">
+				     <a class="" href="/operate/basic/RiskTaskQuery/list.jsp?comCode=OpRiskTask&amp;module=ApprovalBizQuery&amp;component=riskTaskQuery&amp;menue_flag=1">
+                       <span class="sub-menu-text ng-binding">风险任务查询</span></a>
+                </li><!-- end ngRepeat: component in bean.components -->
+            </ul>
+        </li><!-- end ngRepeat: bean in userModules -->
+    </ul>
+    <!-- /SIDEBAR MENU -->
+</div>
+
+
+		</div>
+		<div id="main-content" class="margin-top-50">
+			<div class="padding-top-18"></div>
+			<div class="container ng-scope" ng-controller="prespectiveController">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box border blue">
+							<div class="box-title">
+								<h4><i class="fa fa-bars"></i>任务信息查看</h4>
+							</div>
+						</div>
+					</div>
+
+					<div class="row"><!-- 第二部分 -->
+						<div class="col-md-12">
+							<!-- ngInclude: '/operate/basic/OpQueryService/buttonContent.jsp' --><div ng-include="'/operate/basic/OpQueryService/buttonContent.jsp'" class="ng-scope">
+
+
+<div class="row ng-scope" ng-show="true">
+    <div class="col-md-12">
+        <!-- BOX -->
+        <div>
+            <!-- 弹框信息 -->
+
+            <!-- 附件 -->
+            <div class="box-body popWin ng-scope" id="attachmentView" style="padding:10px; margin:10px; width:800px;max-height:600px; display: none;position: absolute;overflow-y:auto">
+                <button type="button" class="close" ng-click="closeAttachmentWin()">×</button>
+
+                <!-- list页面 -->
+                <div class="box border blue ng-hide" ng-show="isAttachmentList">
+                    <div class="box-title">
+                        <h4><i class="fa fa-bars"></i>附件列表</h4>
+                        <div class="tools hidden-xs">
+                            <a href="javascript:;" class="config">
+                                <i class="fa fa-plus-square" ng-click="upLoad()">上传</i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>案件类型</th>
+                                <th>案件编号</th>
+                                <th>身份证号码</th>
+                                <th>文件描述</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- ngRepeat: obj in attachmentList -->
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <div class="pull-left ng-binding">
+                                        共计&nbsp;<strong class="ng-binding"></strong>&nbsp;条记录，&nbsp;&nbsp;/每页，&nbsp;
+                                        当前页码&nbsp;<strong class="ng-binding">/</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pull-right">
+                                        <button class="btn btn-default ng-hide" ng-show="remarkPage.hasPre" ng-click="queryRemarkList(remarkPage,remarkPage.prePage)">上一页
+                                        </button>
+                                        <button class="btn btn-default ng-hide" ng-show="remarkPage.hasNext" ng-click="queryRemarkList(remarkPage,remarkPage.nextPage)">下一页
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!-- list页面 -->
+
+                <!-- 上传 -->
+                <div class="box border blue ng-hide" ng-show="isUpLoad">
+                    <div class="box-title">
+                        <h4 class="text-info"><i class="fa fa-sign-out"></i> <b>上传附件</b></h4>
+                    </div>
+                    <div class="box-body">
+                        <form class="form-horizontal ng-pristine ng-invalid ng-invalid-required" name="roleForm" id="form" enctype="multipart/form-data" method="post">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">案件类型</label>
+                                <div class="col-md-6">
+                                    <input id="caseType" name="caseType" value="AP" type="hidden">
+                                    <input name="caseTypeCN" class="form-control" value="审批" ng-disabled="true" required="" disabled="disabled" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">案件编号</label>
+                                <div class="col-md-6">
+                                    <input id="caseId" value="C17815190734466qxrne" name="caseId" type="hidden">
+                                    <input name="caseId" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="appCase.caseId" ng-disabled="true" required="" disabled="disabled" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">身份证号码</label>
+                                <div class="col-md-6">
+                                    <input id="icNumber" value="511128197501080016" name="icNumber" type="hidden">
+                                    <input name="icNumber" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="appCase.custIdNbr" ng-disabled="true" required="" disabled="disabled" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">文件描述</label>
+                                <div class="col-md-6">
+                                    <input id="fileDescTx" name="fileDescTx" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" ng-model="fileDesc" ng-disabled="false" required="" type="text">
+                                </div>
+                            </div>
+                            <input id="fileDesc" value="" name="fileDesc" type="hidden">
+                            <input id="lastName" value="" name="lastName" type="hidden">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">附件上传</label>
+                                <div class="col-md-6">
+                                    <input id="file" name="file" ng-model="file" class="ng-pristine ng-untouched ng-valid" type="file">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="button" class="btn btn-default" ng-click="attachmentInfo()"><i class="fa fa-list"></i>列表
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="attachmentUpLoad()"><i class="fa fa-save"></i>保存
+                                    </button>
+                                    <!-- ngIf: flag==1 -->
+                                    <!-- ngIf: flag==2 -->
+                                    <!-- ngIf: flag==4 -->
+                                </div>
+                            </div>
+                        </form>
+                        <!-- 上传-->
+                        <!-- 下载-->
+                        <form class="form-horizontal ng-pristine ng-valid ng-hide" name="roleForm" id="downloadform" enctype="multipart/form-data" method="post" action="/operate/op/hbAttachment/OpHbAttachment/attachmentDownLoad.do" ng-show="false">
+                            <input id="id" name="id" value="" type="hidden">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- BOX -->
+    </div>
+</div></div>
+						</div>
+					</div><!-- 第二部分 -->
+					<div class="row"><!-- 第三部分 -->
+						<div class="col-md-12">
+							<!-- ngInclude: '/operate/basic/OpQueryService/preApproveInfo.jsp' --><div ng-include="'/operate/basic/OpQueryService/preApproveInfo.jsp'" class="ng-scope">
+
+
+
+<div class="col-md-12 ng-scope">
+    <!-- BOX -->
+    <div class="box border blue">
+        <div class="box-body big">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="tabbable">
+                                <button name="Submit1" class="btn btn-default" ng-click="imageSearch();"><i class="fa fa-save"></i>影像调阅
+                                </button>
+                                <button ng-show="propType" name="Submit10" class="btn btn-default ng-hide" ng-click="contractSearch();"><i class="fa fa-save"></i>合同影像
+                                </button>
+                                <button name="Submit6" class="btn btn-default" ng-click="attachmentInfo();"><i class="fa fa-save"></i>附件
+                                </button>
+                                <button name="Submit9" class="btn btn-default" ng-click="goBack();"><i class="fa fa-reply"></i>返回
+                                </button>
+
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#tab_1_1" data-toggle="tab"><i class="fa fa-home"></i>
+                                        工单基本信息</a></li>
+                                   
+                                    <li ng-show="appCase.casetype!='5010' "><a href="#tab_1_10" data-toggle="tab" ng-click="queryReviewData()"><i class="fa fa-flask"></i> 反欺诈信息</a></li>
+                                    <li ng-show="appCase.casetype!='5010' "><a href="#tab_1_12" data-toggle="tab" ng-click="queryReviewRule()"><i class="fa fa-flask"></i> 反欺诈规则</a></li>
+                                    <li ng-show="appCase.casetype!='5010' "><a href="#tab_1_11" data-toggle="tab" ng-click="getSearchInfo()"><i class="fa fa-flask"></i>引擎信息</a></li>
+                                    <li ng-show="appCase.casetype!='5010' "><a href="#tab_1_13" data-toggle="tab" ng-click="getILogInfo()"><i class="fa fa-flask"></i>ILog信息</a></li>
+                                    <li><a href="#tab_1_3" data-toggle="tab" ng-click="queryTrace()"><i class="fa fa-tags"></i> 流转信息</a></li>
+                                    <li><a href="#tab_1_7" data-toggle="tab" ng-click="queryCaseHistory()"><i class="fa fa-flask"></i> 历史工单</a></li>
+                                    <li><a href="#tab_1_9" data-toggle="tab" ng-click="queryException()"><i class="fa fa-flask"></i> 异常信息</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade in active" id="tab_1_1">
+                                        <!-- ngInclude: '/operate/basic/OpQueryService/basicMsg.jsp' --><div ng-include="'/operate/basic/OpQueryService/basicMsg.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+	<div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+		<div class="panel-body">
+
+			
+			<!-- ngInclude: '../OpProcessRuntime/photoInfo.jsp' --><div ng-include="'../OpProcessRuntime/photoInfo.jsp'" class="ng-scope">
+<script type="text/javascript" class="ng-scope">
+var url = contextPath+'/op/appCase/OpAppCase/photoInfo.do';
+var param = {"caseId":caseId};
+$.ajax({
+	type:'post',
+	data: param,
+	url:url,
+	success:function(data){
+		if(data.userPhoto != null){
+			if(data.userPhoto.BACK != null && data.userPhoto.FRONT != null && data.userPhoto.FACE != null){
+				loanImage(data.userPhoto.BACK,data.userPhoto.FRONT,data.userPhoto.FACE,data.userPhoto.POLICE);
+			} else {
+				$("#imgTitle").hide();
+				$("#imgTable").hide();
+			}
+		} else {
+			$("#imgTitle").hide();
+			$("#imgTable").hide();
+		}
+	}
+});
+function loanImage(userPhotoBACK,userPhotoFRONT,userPhotoFACE,userPhotoPOLICE){
+	// 影像图片
+	var userPhoto_BACK_path = userPhotoBACK.path;
+	var userPhoto_FRONT_path = userPhotoFRONT.path;
+	var userPhoto_FACE_path = userPhotoFACE.path;
+    var frontIviewer;
+    var backIviewer;
+    var faceIviewer;
+    var policeIviewer;
+	if (userPhoto_FRONT_path != null) {
+		 var frontUrl = contextPath + '/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=' + userPhoto_FRONT_path + '&caseId=' + caseId + '&imageType=ID_CARD';
+		 if (frontIviewer) {
+			frontIviewer.iviewer('loadImage', frontUrl);
+		 } else {
+		 	frontIviewer = $("#frontImgBox").iviewer({src: frontUrl});
+		 }
+	 }
+	 if (userPhoto_BACK_path != null) {
+		 var backUrl = contextPath + '/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=' + userPhoto_BACK_path + '&caseId=' + caseId + '&imageType=ID_CARD';
+		 if (backIviewer) {
+		 	backIviewer.iviewer('loadImage', backUrl);
+		 } else {
+		 	backIviewer = $("#backImgBox").iviewer({src: backUrl});
+		 }
+	 }
+	 if (userPhoto_FACE_path != null) {
+		 var faceUrl = contextPath + '/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=' + userPhoto_FACE_path + '&caseId=' + caseId + '&imageType=ID_CARD';
+		 if (faceIviewer) {
+		 	faceIviewer.iviewer('loadImage', faceUrl);
+		 } else {
+		 	faceIviewer = $("#faceImgBox").iviewer({src: faceUrl});
+		 }
+	 }
+	 if (userPhotoPOLICE != null && userPhotoPOLICE.path != null) {
+		 var policeUrl = contextPath + '/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=' + userPhotoPOLICE.path + '&caseId=' + caseId + '&imageType=ID_CARD';
+		 if (policeIviewer) {
+			 policeIviewer.iviewer('loadImage', policeUrl);
+		 } else {
+			 policeIviewer = $("#policeImgBox").iviewer({src: policeUrl});
+		 }
+	 } else {
+		 $("#policeImgBox").html("无照片");
+	 }
+	 
+	 // 影像信息
+	 $("#backTable").append("<tr><td>ID Photo（正式身份证照片）分值："+userPhotoBACK.idPhoto+"</td><td>confidence 分值："+userPhotoBACK.confidence+"</td></tr>")
+	 .append("<tr><td>Temporary ID Photo（临时身份证照片）分值："+userPhotoBACK.temporaryIDPhoto+"</td><td>1e-3 分值："+userPhotoBACK.le3+"</td></tr>")
+	 .append("<tr><td>Photocopy（正式身份证的复印件） 分值："+userPhotoBACK.photocopy+"</td><td>1e-4 分值："+userPhotoBACK.le4+"</td></tr>")
+	 .append("<tr><td>Screen（手机或电脑截屏翻拍的照片）分值："+userPhotoBACK.screen+"</td><td>1e-5 分值："+userPhotoBACK.le5+"</td></tr>")
+	 .append("<tr><td>Edited（用工具合成或者编辑过的身份证图片）分值："+userPhotoBACK.edited+"&nbsp;&nbsp;</td><td>1e-6 分值："+userPhotoBACK.le6+"</td></tr>");
+	
+	 $("#frontTable").append("<tr><td>ID Photo（正式身份证照片）分值："+userPhotoFRONT.idPhoto+"</td><td>confidence 分值："+userPhotoFRONT.confidence+"</td></tr>")
+	 .append("<tr><td>Temporary ID Photo（临时身份证照片）分值："+userPhotoFRONT.temporaryIDPhoto+"</td><td>1e-3 分值："+userPhotoFRONT.le3+"</td></tr>")
+	 .append("<tr><td>Photocopy（正式身份证的复印件） 分值："+userPhotoFRONT.photocopy+"</td><td>1e-4 分值："+userPhotoFRONT.le4+"</td></tr>")
+	 .append("<tr><td>Screen（手机或电脑截屏翻拍的照片）分值："+userPhotoFRONT.screen+"</td><td>1e-5 分值："+userPhotoFRONT.le5+"</td></tr>")
+	 .append("<tr><td>Edited（用工具合成或者编辑过的身份证图片）分值："+userPhotoFRONT.edited+"&nbsp;&nbsp;</td><td>1e-6 分值："+userPhotoFRONT.le6+"</td></tr>");
+
+	 $("#faceTable").append("<tr><td>ID Photo（正式身份证照片）分值："+userPhotoFACE.idPhoto+"</td><td>confidence 分值："+userPhotoFACE.confidence+"</td></tr>")
+	 .append("<tr><td>Temporary ID Photo（临时身份证照片）分值："+userPhotoFACE.temporaryIDPhoto+"</td><td>1e-3 分值："+userPhotoFACE.le3+"</td></tr>")
+	 .append("<tr><td>Photocopy（正式身份证的复印件） 分值："+userPhotoFACE.photocopy+"</td><td>1e-4 分值："+userPhotoFACE.le4+"</td></tr>")
+	 .append("<tr><td>Screen（手机或电脑截屏翻拍的照片）分值："+userPhotoFACE.screen+"</td><td>1e-5 分值："+userPhotoFACE.le5+"</td></tr>")
+	 .append("<tr><td>Edited（用工具合成或者编辑过的身份证图片）分值："+userPhotoFACE.edited+"&nbsp;&nbsp;</td><td>1e-6 分值："+userPhotoFACE.le6+"</td></tr>");
+ }
+</script>
+<h4 id="imgTitle" class="text-info ng-scope"><i class="fa fa-sign-out"></i> <b>影像信息</b></h4>
+<table class="table table-bordered ng-scope" id="imgTable">
+	<colgroup><col style="width:25%">
+	<col style="width:25%">
+	<col style="width:25%">
+	<col style="width:25%">
+    </colgroup><tbody><tr>
+        <td>身份证反面</td>
+        <td>身份证正面</td>
+        <td>大头照</td>
+        <td>公安照片</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <!-- <img id="backImage" height="300px" src="{{backUrl}}"/> -->
+            
+            <div id="backImgBox" style="position: relative; height: 300px; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden;" class="iviewer_cursor"><img src="/operate/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=idCard/2017-08-15/880969-065559-ZefwItR9pKFa0P4n-qGsA3HlGZJZ4hkyLCQvbpjQU0som1YUIuQ-h8Fpp9EC0aJz.jpg&amp;caseId=C17815190734466qxrne&amp;imageType=ID_CARD" style="position: absolute; top: 11px; left: 0px; max-width: none; width: 209px; height: 278px;">
+            <div class="iviewer_zoom_in iviewer_common iviewer_button"></div><div class="iviewer_zoom_out iviewer_common iviewer_button"></div><div class="iviewer_zoom_zero iviewer_common iviewer_button"></div><div class="iviewer_zoom_fit iviewer_common iviewer_button"></div><div class="iviewer_zoom_status iviewer_common">22%</div><div class="iviewer_rotate_left iviewer_common iviewer_button"></div><div class="iviewer_rotate_right iviewer_common iviewer_button"></div></div>
+        </td>
+        <td align="center">
+            <!-- <img id="frontImage" height="300px" src='{{frontUrl}}'/> -->
+            <div id="frontImgBox" style="position: relative; height: 300px; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden;" class="iviewer_cursor"><img src="/operate/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=idCard/2017-08-15/880969-065530-atVgk-tNpuihbyC30jzig0qAjjmNVpjT58K_9MX65u1EXdOnxDf4okzj2ARfm1nU.jpg&amp;caseId=C17815190734466qxrne&amp;imageType=ID_CARD" style="position: absolute; top: 11px; left: 0px; max-width: none; width: 209px; height: 278px;">
+            <div class="iviewer_zoom_in iviewer_common iviewer_button"></div><div class="iviewer_zoom_out iviewer_common iviewer_button"></div><div class="iviewer_zoom_zero iviewer_common iviewer_button"></div><div class="iviewer_zoom_fit iviewer_common iviewer_button"></div><div class="iviewer_zoom_status iviewer_common">22%</div><div class="iviewer_rotate_left iviewer_common iviewer_button"></div><div class="iviewer_rotate_right iviewer_common iviewer_button"></div></div>
+
+        </td>
+        <td align="center">
+            <!-- <img id="faceImage" height="300px" src="{{faceUrl}}"/> -->
+            <div id="faceImgBox" style="position: relative; height: 300px; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden;" class="iviewer_cursor"><img src="/operate/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=idCard/2017-08-15/880969-065645-YjrmZiq9EXqjK4DwLKQtsyj2ZBiIAXo6EnIU6YBqKPKUQYsyaE8Z9qUUXML83Y8r.jpg&amp;caseId=C17815190734466qxrne&amp;imageType=ID_CARD" style="position: absolute; top: 10.5px; left: 0px; max-width: none; width: 209px; height: 279px;">
+            <div class="iviewer_zoom_in iviewer_common iviewer_button"></div><div class="iviewer_zoom_out iviewer_common iviewer_button"></div><div class="iviewer_zoom_zero iviewer_common iviewer_button"></div><div class="iviewer_zoom_fit iviewer_common iviewer_button"></div><div class="iviewer_zoom_status iviewer_common">22%</div><div class="iviewer_rotate_left iviewer_common iviewer_button"></div><div class="iviewer_rotate_right iviewer_common iviewer_button"></div></div>
+
+        </td>
+        <td rowspan="2" valign="middle" align="center">
+            <div id="policeImgBox" style="position: relative; height: 600px; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden;" class="iviewer_cursor"><img src="/operate/wbps/business/CaseAttachment/findAttachment.do?attachmentFullPath=20170815/511128197501080016_PIVS.jpg&amp;caseId=C17815190734466qxrne&amp;imageType=ID_CARD" style="position: absolute; top: 172px; left: 0px; max-width: none; width: 209px; height: 256px;">
+            <div class="iviewer_zoom_in iviewer_common iviewer_button"></div><div class="iviewer_zoom_out iviewer_common iviewer_button"></div><div class="iviewer_zoom_zero iviewer_common iviewer_button"></div><div class="iviewer_zoom_fit iviewer_common iviewer_button"></div><div class="iviewer_zoom_status iviewer_common">139%</div><div class="iviewer_rotate_left iviewer_common iviewer_button"></div><div class="iviewer_rotate_right iviewer_common iviewer_button"></div></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table style="width:100%" id="backTable">
+               <!--  <tr>
+                    <td id="userPhoto_BACK_idPhoto">ID Photo（正式身份证照片) 分值：{{userPhoto.BACK.idPhoto}}</td>
+                    <td id="userPhoto_BACK_confidence">confidence 分值：{{userPhoto.BACK.confidence}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_BACK_temporaryIDPhoto">Temporary ID Photo（临时身份证照片）分值：{{userPhoto.BACK.temporaryIDPhoto}}</td>
+                    <td id="userPhoto_BACK_le3">1e-3 分值：{{userPhoto.BACK.le3}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_BACK_photocopy">Photocopy（正式身份证的复印件） 分值：{{userPhoto.BACK.photocopy}}</td>
+                    <td id="userPhoto_BACK_le4">1e-4 分值：{{userPhoto.BACK.le4}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_BACK_screen">Screen（手机或电脑截屏翻拍的照片）分值：{{userPhoto.BACK.screen}}</td>
+                    <td id="userPhoto_BACK_le5">1e-5 分值：{{userPhoto.BACK.le5}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_BACK_edited">Edited（用工具合成或者编辑过的身份证图片）分值：{{userPhoto.BACK.edited}}&nbsp;&nbsp;</td>
+                    <td id="userPhoto_BACK_le6">1e-6 分值：{{userPhoto.BACK.le6}}</td>
+                </tr> -->
+            <tbody><tr><td>ID Photo（正式身份证照片）分值：1</td><td>confidence 分值：</td></tr><tr><td>Temporary ID Photo（临时身份证照片）分值：0</td><td>1e-3 分值：</td></tr><tr><td>Photocopy（正式身份证的复印件） 分值：0</td><td>1e-4 分值：</td></tr><tr><td>Screen（手机或电脑截屏翻拍的照片）分值：0</td><td>1e-5 分值：</td></tr><tr><td>Edited（用工具合成或者编辑过的身份证图片）分值：0&nbsp;&nbsp;</td><td>1e-6 分值：</td></tr></tbody></table>
+        </td>
+        <td>
+            <table style="width:100%" id="frontTable">
+                <!-- <tr>
+                    <td id="userPhoto_FRONT_idPhoto">ID Photo（正式身份证照片) 分值：{{userPhoto.FRONT.idPhoto}}</td>
+                    <td id="userPhoto_FRONT_confidence">confidence 分值：{{userPhoto.FRONT.confidence}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FRONT_temporaryIDPhoto">Temporary ID Photo（临时身份证照片）分值：{{userPhoto.FRONT.temporaryIDPhoto}}</td>
+                    <td id="userPhoto_FRONT_le3">1e-3 分值：{{userPhoto.FRONT.le3}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FRONT_photocopy">Photocopy（正式身份证的复印件） 分值：{{userPhoto.FRONT.photocopy}}</td>
+                    <td id="userPhoto_FRONT_le4">1e-4 分值：{{userPhoto.FRONT.le4}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FRONT_screen">Screen（手机或电脑截屏翻拍的照片）分值：{{userPhoto.FRONT.screen}}</td>
+                    <td id="userPhoto_FRONT_le5">1e-5 分值：{{userPhoto.FRONT.le5}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FRONT_edited">Edited（用工具合成或者编辑过的身份证图片）分值：{{userPhoto.FRONT.edited}}&nbsp;&nbsp;</td>
+                    <td id="userPhoto_FRONT_le6">1e-6 分值：{{userPhoto.FRONT.le6}}</td>
+                </tr> -->
+            <tbody><tr><td>ID Photo（正式身份证照片）分值：0.998</td><td>confidence 分值：95.028</td></tr><tr><td>Temporary ID Photo（临时身份证照片）分值：0</td><td>1e-3 分值：62.169</td></tr><tr><td>Photocopy（正式身份证的复印件） 分值：0</td><td>1e-4 分值：69.315</td></tr><tr><td>Screen（手机或电脑截屏翻拍的照片）分值：0.002</td><td>1e-5 分值：74.399</td></tr><tr><td>Edited（用工具合成或者编辑过的身份证图片）分值：0&nbsp;&nbsp;</td><td>1e-6 分值：78.038</td></tr></tbody></table>
+        </td>
+        <td>
+            <table style="width:100%" id="faceTable">
+                <!-- <tr>
+                    <td id="userPhoto_FACE_idPhoto">ID Photo（正式身份证照片) 分值：{{userPhoto.FACE.idPhoto}}</td>
+                    <td id="userPhoto_FACE_confidence">confidence 分值：{{userPhoto.FACE.confidence}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FACE_temporaryIDPhoto">Temporary ID Photo（临时身份证照片）分值：{{userPhoto.FACE.temporaryIDPhoto}}</td>
+                    <td id="userPhoto_FACE_le3">1e-3 分值：{{userPhoto.FACE.le3}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FACE_photocopy">Photocopy（正式身份证的复印件） 分值：{{userPhoto.FACE.photocopy}}</td>
+                    <td id="userPhoto_FACE_le4">1e-4 分值：{{userPhoto.FACE.le4}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FACE_screen">Screen（手机或电脑截屏翻拍的照片）分值：{{userPhoto.FACE.screen}}</td>
+                    <td id="userPhoto_FACE_le5">1e-5 分值：{{userPhoto.FACE.le5}}</td>
+                </tr>
+                <tr>
+                    <td id="userPhoto_FACE_edited">Edited（用工具合成或者编辑过的身份证图片）分值：{{userPhoto.FACE.edited}}&nbsp;&nbsp;</td>
+                    <td id="userPhoto_FACE_le6">1e-6 分值：{{userPhoto.FACE.le6}}</td>
+                </tr> -->
+            <tbody><tr><td>ID Photo（正式身份证照片）分值：</td><td>confidence 分值：90.196</td></tr><tr><td>Temporary ID Photo（临时身份证照片）分值：</td><td>1e-3 分值：62.169</td></tr><tr><td>Photocopy（正式身份证的复印件） 分值：</td><td>1e-4 分值：69.315</td></tr><tr><td>Screen（手机或电脑截屏翻拍的照片）分值：</td><td>1e-5 分值：74.399</td></tr><tr><td>Edited（用工具合成或者编辑过的身份证图片）分值：&nbsp;&nbsp;</td><td>1e-6 分值：78.038</td></tr></tbody></table>
+        </td>
+    </tr>
+</tbody></table>
+
+				
+</div>
+
+			<!-- ngIf: appCase.casetype=='6000' --><!-- ngInclude: '../OpQueryService/creditApprove/appCreditapproveInfo.jsp' --><div ng-show="showButton" ng-if="appCase.casetype=='6000'" ng-include="'../OpQueryService/creditApprove/appCreditapproveInfo.jsp'" class="ng-scope">
+<h4 class="text-info ng-scope"><i class="fa fa-sign-out"></i> <b>申请信息</b></h4>
+<button type="button" class="btn btn-default ng-scope" ng-show="showButton" ng-click="openModify();">查看修改历史信息</button>
+<table class="table table-bordered ng-scope">
+    <tbody><tr>
+        <td style="font-weight:bold;">姓名</td>
+        <td class="ng-binding">吴昀烨</td>
+        <td style="font-weight:bold;">身份证</td>
+        <td class="ng-binding">511128197501080016</td>
+        <td style="font-weight:bold;">手机号</td>
+        <td ng-click="openFqz()"><a class="ng-binding">13980068353</a></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">地址-省</td>
+        <td class="ng-binding">四川省</td>
+        <td style="font-weight:bold;">地址-市</td>
+        <td class="ng-binding">成都市</td>
+        <td style="font-weight:bold;">地址-区</td>
+        <td class="ng-binding">金牛区</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">详细地址</td>
+        <td colspan="5" class="ng-binding">玉赛路9号华凌尚城6栋2单元1121</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">联系人1关系</td>
+        <td class="ng-binding">父母</td>
+        <td style="font-weight:bold;">联系人1姓名</td>
+        <td class="ng-binding">吴越思</td>
+        <td style="font-weight:bold;">联系人1手机号</td>
+        <td ng-click="openFqz()"><a class="ng-binding">18980815695</a></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">联系人2关系</td>
+        <td class="ng-binding">亲属</td>
+        <td style="font-weight:bold;">联系人2姓名</td>
+        <td class="ng-binding">王超</td>
+        <td style="font-weight:bold;">联系人2手机号</td>
+        <td ng-click="openFqz()"><a class="ng-binding">13540210268</a></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">职业类别</td>
+        <td class="ng-binding">商业贸易/批发零售</td>
+        <td style="font-weight:bold;">公司名称</td>
+        <td class="ng-binding">帝升实业集团有限公司</td>
+        <td style="font-weight:bold;">工作邮箱</td>
+        <td class="ng-binding">wyy563@163.com</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">工作地址-省</td>
+        <td class="ng-binding">四川省</td>
+        <td style="font-weight:bold;">工作地址-市</td>
+        <td class="ng-binding">成都市</td>
+        <td style="font-weight:bold;">工作地址-区</td>
+        <td class="ng-binding">锦江区</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">工作详细地址</td>
+        <td colspan="3" class="ng-binding">二环路东五段239号</td>
+        <td style="font-weight:bold;">月收入</td>
+        <td class="ng-binding"></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">客群</td>
+        <td class="ng-binding">113</td>
+        <td style="font-weight:bold;">通路代码</td>
+        <td class="ng-binding">FYGDK800001</td>
+        <td style="font-weight:bold;">企业邮箱</td>
+        <td class="ng-binding"></td>
+    </tr>
+
+</tbody></table>
+
+<h4 class="text-info ng-scope"><i class="fa fa-sign-out"></i> <b>征信信息摘要</b></h4>
+<table class="table table-bordered ng-scope">
+    <tbody><tr>
+        <td style="font-weight:bold;">电话</td>
+        <td class="ng-binding">暂无信息</td>
+        <td style="font-weight:bold;">单位名称</td>
+        <td class="ng-binding">暂无信息</td>
+        <td style="font-weight:bold;">单位名称变更时间</td>
+        <td class="ng-binding">暂无信息</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">单位地址</td>
+        <td class="ng-binding">暂无信息</td>
+        <td style="font-weight:bold;">单位地址变更时间</td>
+        <td class="ng-binding">暂无信息</td>
+        <td style="font-weight:bold;">单位电话</td>
+        <td class="ng-binding">暂无信息</td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;">家庭地址</td>
+        <td class="ng-binding">暂无信息</td>
+        <td style="font-weight:bold;">家庭地址变更时间</td>
+        <td class="ng-binding">暂无信息</td>
+        <td></td>
+        <td></td>
+    </tr>
+</tbody></table>
+				
+</div><!-- end ngIf: appCase.casetype=='6000' -->
+				<!-- ngIf: appCase.casetype=='6000' --><!-- ngInclude: '../OpQueryService/creditApprove/approveModify.jsp' --><div ng-show="showModify" ng-if="appCase.casetype=='6000'" ng-include="'../OpQueryService/creditApprove/approveModify.jsp'" class="ng-scope ng-hide">
+
+
+            <button type="button" class="btn btn-default ng-scope ng-hide" ng-show="showModify" ng-click="closeModify();">返回<div></div></button><h4 class="text-info ng-scope"><i class="fa fa-sign-out"></i> <b>查看修改信息</b></h4>
+            
+            <table class="table table-bordered ng-scope">
+                <thead>
+                <tr>
+                    <th>修改时间</th>
+                    <th>修改类型</th>
+                    <th>修改人</th>
+                    <th>修改前内容</th>
+                    <th>修改后内容</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- ngRepeat: obj in modify -->
+                </tbody>
+            </table>
+<table class="table ng-scope">
+    <thead>
+    <tr>
+        <td>
+            <div class="pull-left ng-binding">
+                共计
+                &nbsp;<strong class="ng-binding"></strong>&nbsp;
+                条记录，
+                &nbsp;&nbsp;/
+                每页，
+                &nbsp;
+                当前页码
+                &nbsp;<strong class="ng-binding">/</strong>
+            </div>
+        </td>
+        <td>
+            <div class="pull-right">
+                <button class="btn btn-default ng-hide" ng-show="page.hasPre" ng-click="queryModifyHistory(page,page.prePage)">上一页</button>
+                <button class="btn btn-default ng-hide" ng-show="page.hasNext" ng-click="queryModifyHistory(page,page.nextPage)">下一页</button>
+                <!-- <button class="btn btn-default" ng-click="create()">新增</button> -->
+            </div>
+        </td>
+    </tr>
+    </thead>
+</table>
+</div><!-- end ngIf: appCase.casetype=='6000' -->
+			<!-- ngIf: appCase.casetype=='5000' -->
+			<!-- ngIf: appCase.casetype=='5010' -->
+			<!-- ngIf: appCase.casetype=='7000' -->
+			<!-- ngIf: appCase.casetype=='7100' -->
+			<!-- ngIf: appCase.casetype=='7200' -->
+			<!-- ngIf: appCase.casetype=='7300' -->
+			<!-- ngIf: appCase.casetype=='7400' -->
+			<!-- ngIf: appCase.casetype=='7500' -->
+			<!-- ngIf: appCase.casetype=='7600' -->
+			<!-- ngIf: appCase.casetype=='7700' -->
+			<!-- ngIf: appCase.casetype=='7800' -->
+
+			<h4 class="text-info"><i class="fa fa-sign-out"></i> <b>手机号修改历史信息</b></h4>
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>旧手机号</th>
+					<th>新手机号</th>
+					<th>修改时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				<!-- ngRepeat: obj in phoneHistoryList -->
+				</tbody>
+			</table>
+			<h4 class="text-info">
+				<i class="fa fa-sign-out"></i> <b>备注信息</b>
+			</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="25%">类型</th>
+						<th width="25%">创建时间</th>
+						<th width="25%">创建者</th>
+						<th width="25%">备注</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ngRepeat: obj in remarkerList -->
+				</tbody>
+			</table>
+
+			<h4 class="text-info">
+				<i class="fa fa-sign-out"></i> <b>风险提示信息</b>
+			</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="50%">决策引擎结论</th>
+						<th width="50%">触碰规则提示</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="word-wrap: break-word;word-break:break-all;" width="50%">
+							<div id="riskRuleMessage" ng-bind-html="promptInfo.riskRuleMessage" class="ng-binding">白名单推荐人:决策引擎无记录<br>审批结果:拒绝<br>拒绝码:<br>反欺诈拒绝码:腾讯云欺诈评分中分段命中欺诈关注清单拒绝<br>反欺诈转人工码:-9999999<br></div>
+						</td>
+						<td style="word-wrap: break-word;word-break:break-all;" width="50%">
+							<div id="teleCheckRuleMessage" ng-bind-html="promptInfo.teleCheckRuleMessage" class="ng-binding"> </div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="50%">分数反馈</th>
+						<th width="50%">系统规则提示</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="word-wrap: break-word;word-break:break-all;" width="50%">
+							<div id="bussinessRuleMessage" ng-bind-html="promptInfo.bussinessRuleMessage" class="ng-binding">信用评分:0.0<br>履约能力指数:0.0<br>芝麻评分:664.0<br>GBDT评分:<br></div>
+						</td>
+						<td style="word-wrap: break-word;word-break:break-all;" width="50%">
+							<div id="systemRuleMessage" ng-bind-html="promptInfo.systemRuleMessage" class="ng-binding">规则编号：<br>流转；<br></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h4 class="text-info"><i class="fa fa-sign-out"></i> <b>电核信息</b>
+			</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="14%">电话类型</th>
+						<th width="14%">电话号码</th>
+						<th width="14%">电核结果</th>
+						<th width="14%">电核备注</th>
+						<th width="14%">操作人</th>
+						<th width="14%">电核时间</th>
+						<th width="16%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ngRepeat: obj in allVerificationList -->
+				</tbody>
+			</table>
+
+			<!-- ngIf: appCase.casetype=='6000' --><!-- ngInclude: '../OpQueryService/creditApprove/approveArea.jsp' --><div ng-if="appCase.casetype=='6000'" ng-include="'../OpQueryService/creditApprove/approveArea.jsp'" class="ng-scope">
+
+
+
+<div class="row ng-scope" ng-show="true">
+  <div class="col-md-12">
+    <!-- BOX -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <!--审批 -->
+            <h4 class="text-info"><i class="fa fa-sign-out"></i> <b>审批区域</b></h4>
+            <table class="table table-bordered">
+              <tbody><tr>
+                <td style="width: 12.5%; font-weight: bold;">受理号</td>
+                <td class="ng-binding" width="12.5%">B17815190734466zYpLi</td>
+                <td style="width: 12.5%; font-weight: bold;">姓名</td>
+                <td class="ng-binding" width="12.5%">吴昀烨</td>
+                <td style="width: 12.5%; font-weight: bold;">证件号码</td>
+                <td class="ng-binding" width="12.5%">511128197501080016</td>
+                <td style="width: 12.5%; font-weight: bold;">申请书编号</td>
+                <td class="ng-binding" width="12.5%">2017081519073400000000000000000000055318</td>
+              </tr>
+            </tbody></table>
+            <table class="table table-bordered">
+              <tbody><tr>
+                <td style="width:12.5%; font-weight:bold;">业务类型</td>
+                <td style="width:12.5%;font-weight:bold;">子业务类型 </td>
+                <td style="width:8.5%;font-weight:bold;">受理渠道</td>
+                <td style="width:8.5%;font-weight:bold;">紧急级别</td>
+                <td style="width:10%;font-weight:bold;">批核状态</td>
+                <td style="width:10%;font-weight:bold;">流程创建时间</td>
+                <td style="width:10%;font-weight:bold;">流程期望结束时间</td>
+                <td style="width:10.5%;font-weight:bold;">风险等级</td>
+                <td style="width:9%;font-weight:bold;">是否强制重启案件</td>
+                <td style="width:8.5%;font-weight:bold;">强制转人工标识</td>
+              </tr>
+              <tr>
+                <td class="ng-binding" width="12.5%" height="35px">(白)好人贷授信</td>
+                <td class="ng-binding" width="12.5%" height="35px">(白)好人贷WX-授信审批</td>
+                <td class="ng-binding" width="8.5%" height="35px"></td>
+                <td class="ng-binding" width="8.5%" height="35px">P3</td>
+                <td class="ng-binding" width="10%" height="35px">已正常结案</td>
+                <td class="ng-binding" width="10%" height="35px">2017-08-15 19:07:34</td>
+                <td class="ng-binding" width="10%" height="35px">2017-08-16 10:30:00</td>
+                <td style="width:10.5%;font-weight:bold;" class="ng-binding">畅想版自动拒绝</td>
+                <td style="width:9%;font-weight:bold;" class="ng-binding"></td>
+                <td style="width:8.5%;font-weight:bold;" class="ng-binding">N</td>
+              </tr>
+            </tbody></table>
+            <table class="table table-bordered">
+              <tbody><tr>
+                <td style="width:12.5%;font-weight:bold;" rowspan="2">系统建议</td>
+                <td width="44.25%" height="35px">系统建议额度</td>
+                <td width="44.25%" height="35px">授信额度</td>
+              </tr>
+
+              <tr>
+                <td width="44.25%" height="35px"><input disabled="" ng-model="areCre.systemLimit" class="ng-pristine ng-untouched ng-valid" type="text"></td>
+                <td width="44.25%" height="35px"><input disabled="" ng-model="areCre.creditLimit" class="ng-pristine ng-untouched ng-valid" type="text"></td>
+
+              </tr>
+              <tr>
+                <td style="width: 12.5%; font-weight: bold;" rowspan="4">审批端</td>
+                <td style="width: 44.25%; font-weight: bold;">批核结果</td>
+                <td style="width: 44.25%; font-weight: bold;">拒绝代码</td>
+              </tr>
+              
+              
+              <tr>
+                <td style="width:44.25%;font-weight:bold;">客户行业认定结果</td>
+                <td style="width:44.25%;font-weight:bold;">客户职业认定结果</td>
+              </tr>
+              <tr>
+              
+              </tr>
+            </tbody></table>
+            <table class="table table-bordered" ng-show="isApprove">
+              <tbody><tr>
+                <td style="width: 12.5%; font-weight: bold;">审批意见</td>
+                <td width="87.5%" height="120px"><textarea rows="10" cols="40" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-maxlength" ng-model="wfTrace.approveSuggestion" ng-disabled="true" maxlength="400" required="" disabled="disabled">							</textarea></td>
+              </tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+    </div><!--end row-->
+    <!-- BOX -->
+  </div>
+</div>
+</div><!-- end ngIf: appCase.casetype=='6000' -->
+			<!-- ngIf: appCase.casetype=='5000' -->
+			<!-- ngIf: appCase.casetype=='5010' -->
+			<!-- ngIf: appCase.casetype=='7000' -->
+			<!-- ngIf: appCase.casetype=='7100' -->
+			<!-- ngIf: appCase.casetype=='7200' -->
+			<!-- ngIf: appCase.casetype=='7300' -->
+			<!-- ngIf: appCase.casetype=='7400' -->
+			<!-- ngIf: appCase.casetype=='7500' -->
+			<!-- ngIf: appCase.casetype=='7600' -->
+			<!-- ngIf: appCase.casetype=='7700' -->
+			<!-- ngIf: appCase.casetype=='7800' -->
+
+		</div>
+		<div class="form-group ng-hide" ng-show="startFlag">
+			<div class="col-sm-offset-5 col-sm-10">
+				<button type="button" class="btn btn-default" ng-click="startBtn()">重新发起申请流程</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!--end scroller -->
+</div>
+                                    </div><!-- ****************end tab_1_1****************-->
+
+                                   
+                                    <!-- 客户信息结束 -->
+                                    <div class="tab-pane fade" id="tab_1_3">
+                                        <!-- ngInclude: '/operate/basic/OpQueryService/wfTraceInfo.jsp' --><div ng-include="'/operate/basic/OpQueryService/wfTraceInfo.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+	<div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+    	<div class="panel-body">
+    			<h4 class="text-info"><i class="fa fa-sign-out"></i> <b>流程轨迹</b></h4>
+				<table class="table table-bordered">
+					<thead>
+					 <tr>
+						<th>节点名称</th>
+						<th>开始时间</th>
+						<th>结束时间</th>
+						<th>停留时长</th>
+						<th>指定处理人</th>
+						<th>实际处理人</th>
+						<th>批核人</th>
+						<th>退单原因/异常结案原因</th>
+						<th>处理备注</th>
+						<th>审批意见</th>
+						
+					  </tr>
+					</thead>
+					<tbody>
+					<!-- ngRepeat: obj in traceList --><tr ng-repeat="obj in traceList" class="ng-scope">
+						<td class="ng-binding">业务受理<!-- ngIf: obj.bizNodeNameCN !=null --></td>
+						<td class="ng-binding">2017-08-15 19:07:35</td>
+						<td class="ng-binding">2017-08-15 19:07:35</td>
+						<td class="ng-binding">0秒</td>
+						<td class="ng-binding">SYSTEM</td>
+						<td class="ng-binding">SYSTEM</td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding">由〔SYSTEM〕于2017-08-15 19:07:34处理</td>
+						<td class="ng-binding"></td>
+						
+					</tr><!-- end ngRepeat: obj in traceList --><tr ng-repeat="obj in traceList" class="ng-scope">
+						<td class="ng-binding">数据获取及处理<!-- ngIf: obj.bizNodeNameCN !=null --></td>
+						<td class="ng-binding">2017-08-15 19:07:35</td>
+						<td class="ng-binding">2017-08-15 19:08:22</td>
+						<td class="ng-binding">47秒</td>
+						<td class="ng-binding">CS0101R001</td>
+						<td class="ng-binding">SYSTEM</td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding"></td>
+						
+					</tr><!-- end ngRepeat: obj in traceList --><tr ng-repeat="obj in traceList" class="ng-scope">
+						<td class="ng-binding">End<!-- ngIf: obj.bizNodeNameCN !=null --></td>
+						<td class="ng-binding">2017-08-15 19:08:22</td>
+						<td class="ng-binding">2017-08-15 19:08:22</td>
+						<td class="ng-binding">0秒</td>
+						<td class="ng-binding">SYSTEM</td>
+						<td class="ng-binding">SYSTEM</td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding"></td>
+						<td class="ng-binding">由〔system〕于2017-08-15 19:08:22自动处理</td>
+						<td class="ng-binding"></td>
+						
+					</tr><!-- end ngRepeat: obj in traceList -->
+					</tbody>
+				</table>
+
+				<h4 class="text-info"><i class="fa fa-sign-out"></i> <b>挂起信息</b></h4>
+				<!--挂起信息 -->
+				<table class="table table-bordered">
+					<thead>
+					<tr>
+						<th width="auto">序号</th>
+						<th width="auto">挂起时间</th>
+						<th width="auto">解挂时间</th>
+						<th width="auto">挂起时长</th>
+						<th width="auto">操作人</th>
+						<th width="auto">挂起原因</th>
+						<th width="auto">挂起备注</th>
+					</tr>
+					</thead>
+					<tbody>
+					<!-- ngRepeat: obj in hangupLogList -->
+					</tbody>
+				</table>
+				
+		</div>
+	</div><!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                    <!-- 账户信息结束 -->
+                                    <!-- 合同影像 -->
+                                    <div class="tab-pane fade" id="tab_1_7">
+                                        <!-- ngInclude: '/operate/basic/OpQueryService/appCaseHistory.jsp' --><div ng-include="'/operate/basic/OpQueryService/appCaseHistory.jsp'" class="ng-scope">
+
+
+<div class="panel-body ng-scope">
+	<div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+		<div class="panel-body">
+			<h4 class="text-info">
+				<i class="fa fa-sign-out"></i> <b>历史工单信息</b>
+			</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>受理号</th>
+						<th>客户姓名</th>
+						<th>风险等级</th>
+						<th>紧急级别</th>
+						<th>受理时间</th>
+						<th>业务类型</th>
+						<th>子业务类型</th>
+						<th>受理渠道</th>
+						<th>工单状态</th>
+						<th>批核结果</th>
+						<th>批核人</th>
+						<th>批核时间</th>
+						<th>工单结束时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ngRepeat: obj in caseHisList -->
+				</tbody>
+			</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<td>
+							<div class="pull-left ng-binding">
+								共计
+								&nbsp;<strong class="ng-binding"></strong>&nbsp;
+								条记录，
+								&nbsp;&nbsp;/
+								每页，
+								&nbsp;
+								当前页码
+								&nbsp;<strong class="ng-binding">/</strong>
+							</div>
+						</td>
+						<td>
+							<div class="pull-right">
+								<button class="btn btn-default ng-hide" ng-show="caseHispage.hasPre" ng-click="queryCaseHislist(caseHispage,caseHispage.prePage)">上一页</button>
+								<button class="btn btn-default ng-hide" ng-show="caseHispage.hasNext" ng-click="queryCaseHislist(caseHispage,caseHispage.nextPage)">下一页</button>
+							</div>
+						</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<!--end scroller -->
+</div>
+</div>
+                                    </div> <!-- 合同信息结束 -->
+
+                                    <div class="tab-pane fade" id="tab_1_9">
+                                        <!-- ngInclude: '/operate/basic/OpQueryService/exceptionLog.jsp' --><div ng-include="'/operate/basic/OpQueryService/exceptionLog.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+	<div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+    	<div class="panel-body">
+    			<h4 class="text-info"><i class="fa fa-sign-out"></i> <b>异常信息</b></h4>
+				<table class="table table-bordered">
+					<thead>
+					 <tr>
+						<th>工单号</th>
+						<th>异常类型</th>
+						<th>异常错误码</th>
+						<th>异常详细信息</th>
+						 <th>时间</th>
+					  </tr>
+					</thead>
+					<tbody>
+					<!-- ngRepeat: obj in exLogList -->
+					</tbody>
+				</table>
+				
+				
+		</div>
+	</div><!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_1_10">
+                                        <!-- ngInclude: '/operate/basic/OpProcessRuntime/reviewData.jsp' --><div ng-include="'/operate/basic/OpProcessRuntime/reviewData.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+    <div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+        <div class="panel-body">
+            <h4 class="text-info ng-binding"><i class="fa fa-sign-out"></i>
+                <b>反欺诈信息</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来源:</h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight:bold;">设备号</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">应用名称</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">应用版本号</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">是否模拟器</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备MAC</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备IMEI</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">运营商</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备厂商</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备型号</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">设备名称</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">系统名称</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">系统版本</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">设备分辨率</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">网络类型</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">Ip地址</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">GPS经度</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">GPS纬度</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">GPS国家</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">GPS省份</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">GPS城市</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">GPS县区</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">GPS街道</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机归属省份</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机归属城市</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">IP地址类型</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP归属国家</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP归属省份</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">IP归属城市</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">身份证归属省份</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">身份证归属城市</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">身份证归属县区</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">身份证归属地址</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;"><font color="red">事件最终评估结果</font></td>
+                    <td><font class="ng-binding" color="red"></font></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">事件最终评分</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">结果码</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">结果描述</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">手机关联设备数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联设备数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联身份证数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">手机关联身份证数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联设备类型数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联设备类型数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">手机关联城市数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联城市数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联银行卡数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">手机关联IP数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">手机关联商户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备关联用户数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">设备关联用户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备关联身份证数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备关联IP数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">设备关联IP数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备关联商户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">设备关联手机数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">设备关联手机数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">邮箱关联手机数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">邮箱关联手机数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">联系人关联用户数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">联系人关联设备数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">联系人关联手机数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">联系人关联手机数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">联系人关联商户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP关联设备数</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">IP关联设备数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP关联用户数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP关联用户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+
+                    <td style="font-weight:bold;">IP关联手机数</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP关联手机数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight:bold;">IP关联商户数（跨客户）</td>
+                    <td class="ng-binding"></td>
+                </tr>
+            </tbody></table>
+
+        </div>
+    </div><!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_1_12">
+                                        <!-- ngInclude: '/operate/basic/OpProcessRuntime/reviewRule.jsp' --><div ng-include="'/operate/basic/OpProcessRuntime/reviewRule.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+    <div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+        <div class="panel-body">
+            <h4 class="text-info ng-binding">
+                <i class="fa fa-sign-out"></i> <b>反欺诈规则</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来源:
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight:bold;">最终决定</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight:bold;">flowNo</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight:bold;">最后分数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">策略名</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight:bold;">操作指令</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight:bold;">操作等级</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <!-- ngRepeat: strategey in result.strategySet -->
+
+            </tbody></table>
+
+        </div>
+    </div>
+    <!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_1_11">
+                                        <!-- ngInclude: '/operate/basic/OpProcessRuntime/searchInfo.jsp' --><div ng-include="'/operate/basic/OpProcessRuntime/searchInfo.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+    <div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+        <div class="panel-body">
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>规则结果</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">是否成功</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight: bold;">事件名称</td>
+                    <td class="ng-binding"></td>
+                    <td style="font-weight: bold;">事件标识</td>
+                    <td class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td colspan="1" style="font-weight: bold;">风险结果</td>
+                    <td colspan="5">
+                        <table class="table table-bordered">
+                            <tbody><tr>
+                                <td style="font-weight: bold;">ID</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">决策结果名称(空值即为通过)</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">决策结果标识</td>
+                                <td class="ng-binding"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">营销回馈转换关系</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">风险等级</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">回馈类型</td>
+                                <td colspan="3" class="ng-binding"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">回馈类型的有效期</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">授信最大值</td>
+                                <td class="ng-binding"></td>
+                                <td style="font-weight: bold;">授信最小值</td>
+                                <td class="ng-binding"></td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <!-- ngRepeat: obj in jsonBean.alert.ruleSets -->
+
+            </tbody></table>
+
+
+           
+
+            
+
+           
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>结束时间</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">结束时间</td>
+                    <td colspan="3" class="ng-binding"></td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+    <!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_1_13">
+                                        <!-- ngInclude: '/operate/basic/OpProcessRuntime/ilogInfo.jsp' --><div ng-include="'/operate/basic/OpProcessRuntime/ilogInfo.jsp'" class="ng-scope">
+<div class="panel-body ng-scope">
+    <div class="scroller" data-height="120px" data-always-visible="1" data-rail-visible="1">
+        <div class="panel-body">
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>流程控制</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">下一步业务流程</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">申请编号</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">规则调用编号</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+            </tbody></table>
+
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>信贷结果</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">处理成功</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">错误信息</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">反欺诈拒绝码</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">审批结果</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">取现额度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">一次性额度有效期</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">输出客群标识</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">反欺诈转人工码</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">一次性额度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">担保类型</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">拒绝码</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">贷款利率</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                        <tr>
+                        <td colspan="1" style="font-weight: bold;">还款方式</td>
+                        <td colspan="1" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                        <td colspan="2" style="font-weight: bold;">通过码</td>
+                        <td colspan="2" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="font-weight: bold;">综合授信额度</td>
+                            <td colspan="1" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                            <td colspan="2" style="font-weight: bold;">可借次数</td>
+                            <td colspan="2" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                        </tr>
+            </tbody></table>
+
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>提示信息</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">人行状态</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">提示信息</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+            </tbody></table>
+
+            <h4 class="text-info">
+                <i class="fa fa-sign-out"></i> <b>模型评分</b>
+            </h4>
+            <table class="table table-bordered">
+                <tbody><tr>
+                    <td style="font-weight: bold;">信用评分</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">履约能力指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">恶意透支指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">消费倾向指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">个人稳定性指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">社交活跃性指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">网络使用倾向指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">游戏沉迷指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">信用评分储蓄卡过去六个月支出金额评分</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分近6个月手机号在百融合作机构申请机构数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分是否命中特殊名单规则</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">信用评分最近六个月本人信贷类产品还款金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分支付宝最近三个月份支付金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分百融非银分</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">信用评分最近一年M3逾期状态</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分收货地址稳定天数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分信用卡过去三个月支出金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">信用评分性别</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分年龄</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">信用评分截距</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">履约能力指数最近六个月流动资产日均值</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">履约能力指数是否有车</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">履约能力指数是否有房</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">履约能力指数最近六个月支付总金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">履约能力指数储蓄卡过去6个月收入总和</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">履约能力指数储蓄卡过去6个月可用余额总和</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">基础资金紧张评分</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">恶意透支指数最近六个月银行金融机构申请次数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">恶意透支指数最近六个月非银行金融机构申请次数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">恶意透支指数最近六个月逾期次数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">恶意透支指数最近六个月逾期总笔数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">恶意透支指数最近两年</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">恶意透支指数最近6个月信用卡还款率</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">消费倾向指数月消费金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">消费倾向指数近12个月浏览次数总和</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">消费倾向指数近12个月消费次数总和</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">消费倾向指数最近六个月支付总金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">消费倾向指数消费稳定度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">消费倾向指数消费档次</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数最近六个月银行金融机构申请次数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数最近六个月非银行金融机构申请次数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">资金需求指数信用卡过去1-6个月取现金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数最近6个月信用卡还款率</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数贷款需求偏好</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">资金需求指数贷款APP应用偏好度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">资金需求指数过去1-12个月贷款金额</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">个人稳定性指数手机号稳定天数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">个人稳定性指数地址稳定天数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">个人稳定性指数最近一年使用手机号码数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">个人稳定性指数近1年人脉圈稳定度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">个人稳定性指数客户位置稳定性指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">社交活跃性指数社交帐号发表微博数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">社交活跃性指数是否社交帐号达人</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">社交活跃性指数社交帐号粉丝人数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">社交活跃性指数社交帐号关注人数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">社交活跃性指数社交影响力指数</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">网络使用倾向指数上网时间</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">网络使用倾向指数上网频次</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">网络使用倾向指数网络活跃程度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">游戏沉迷指数游戏应用偏好度</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">游戏沉迷指数游戏攻略阅读偏好</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td style="font-weight: bold;">游戏沉迷指数上网目的是游戏</td>
+                    <td style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="font-weight: bold;">游戏沉迷指数游戏狂程度</td>
+                    <td colspan="2" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                    <td colspan="1" style="font-weight: bold;">征信评分</td>
+                    <td colspan="1" style="word-wrap: break-word;word-break:break-all;" class="ng-binding"></td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+    <!--end scroller -->
+</div>
+</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--end row-->
+        </div>
+
+        <!-- BOX -->
+    </div>
+</div></div>
+						</div>
+					</div><!-- 第二部分 -->
+
+				</div>
+				<div class="box-body popWin ng-scope" id="forceRestartView" style="padding:10px; margin:10px; width:700px;max-height:400px; display: none;position: absolute;overflow-y:auto">
+					<div class="box border blue">
+						<div class="box-title">
+							<button type="button" class="close" ng-click="closeForceRestartWin()">×</button>
+							<h4><i class="fa fa-bars"></i>重新发起申请</h4>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+								<table style="width:100%">
+									<colgroup><col style="width:15%">
+									<col style="width:40%">
+									<col style="width:45%">
+									</colgroup><tbody><tr>
+										<td style="text-align: right"><label class="control-label">重启原因：</label></td>
+										<td colspan="2"><textarea style="resize: none;" rows="5" cols="10" class="form-control ng-pristine ng-untouched ng-valid ng-valid-maxlength" ng-model="mReason" maxlength="200"></textarea></td>
+									</tr>
+									<tr>
+										<td style="text-align: center" colspan="4">
+											<button type="button" class="btn btn-info" ng-click="forceRestart()">确定</button>
+											<button type="button" class="btn btn-info" ng-click="closeForceRestartWin()">取消</button>
+										</td>
+									</tr>
+								</tbody></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div><!--end content -->
+	</section>
+	<!--/PAGE -->
+	
+	<!-- JAVASCRIPTS -->
+	<!-- JQUERY -->	
+	<script src="/operate/opAjax/js/jquery/jquery-2.0.3.min.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js?v=0.1.0002"></script>
+	<!-- BOOTSTRAP -->
+	<script src="/operate/opAjax/bootstrap-dist/js/bootstrap.min.js?v=0.1.0002"></script>
+	<!-- SLIMSCROLL -->
+	<script type="text/javascript" src="/operate/opAjax/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js?v=0.1.0002"></script>
+	<script type="text/javascript" src="/operate/opAjax/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js?v=0.1.0002"></script>
+	<!-- BLOCK UI -->
+	<script type="text/javascript" src="/operate/opAjax/js/jQuery-BlockUI/jquery.blockUI.min.js?v=0.1.0002"></script>
+	<!-- BOOTSTRAP WYSIWYG -->	 
+	<script type="text/javascript" src="/operate/opAjax/js/bootstrap-wysiwyg/jquery.hotkeys.min.js?v=0.1.0002"></script>
+	<script type="text/javascript" src="/operate/opAjax/js/bootstrap-wysiwyg/bootstrap-wysiwyg.min.js?v=0.1.0002"></script>
+	<!-- COOKIE -->
+	<script type="text/javascript" src="/operate/opAjax/js/jQuery-Cookie/jquery.cookie.min.js?v=0.1.0002"></script>
+	<!-- bootbox-->
+	<script type="text/javascript" src="/operate/opAjax/js/bootbox/bootbox.min.js?v=0.1.0002"></script>
+	<!-- CUSTOM SCRIPT -->
+	<script src="/operate/opAjax/js/script.js?v=0.1.0002"></script>	
+	<!-- argular js -->
+	<script src="/operate/opAjax/js/angularjs/angular_1_3_15.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/angularjs/angular-ui-router.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/angularjs/angular-animate.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/ui-bootstrap-tpls-0.13.3.min.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/headerController.js?v=0.1.0002"></script>
+	<!--custom argular js end -->
+	
+	<script type="text/javascript" src="/operate/jquery/iviewermaster/jquery.mousewheel.min.js?v=0.1.0002"></script>
+	<script type="text/javascript" src="/operate/jquery/iviewermaster/jquery.iviewer.js?v=0.1.0002"></script>
+	<script src="/operate/opAjax/js/Module/queryService/prespectiveController.js?v=0.1.0002"></script>
+	<script>
+		jQuery(document).ready(function() {		
+			App.init(); //Initialise plugins and elements
+		});		
+		
+	</script>
+
+
+</body>
+'''
+
+
+workbook = xlsxwriter.Workbook('text1.xlsx')
+worksheet = workbook.add_worksheet()
+html = etree.HTML(text)
+
+
+def data_write():
+    result_temp = html.xpath('//table/tbody/tr/td | //table/tbody/tr/td/a')
+    col = 0
+    a = 0
+    for a in range(len(result_temp)) :
+        worksheet.write(row, col, result_temp[a].text)
+        col += 1
+
+    return row
+
+row = 0
+for x in range(10):
+    data_write()
+    row += 1
+
+
+workbook.close()
+
+
+
