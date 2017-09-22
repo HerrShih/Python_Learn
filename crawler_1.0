@@ -1,0 +1,91 @@
+#_*_ coding:utf-8 _*_
+
+import requests
+import time
+import datetime
+#import http.cookiejar
+#from lxml import html
+import os
+import re
+import xlrd
+import xlwt
+from xlutils.copy import copy
+
+header = {
+    'Connection': 'Keep-Alive',
+    'Accept-Language': 'zh-CN,zh;q=0.8,en-US:q=0.5,en:q=0.3',
+    'Accept': 'application/json, text/plain, */*',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+    'Accept-Encoding': 'gzip, deflate,sdch',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Host': '10.4.0.31',
+    'Cookie':'JSESSIONID=6DE9EDEA498C69BE7A12AE9A4CB60950'
+
+}
+
+
+#'Cookie': 'jsessionid=2DBC34B63F52F1BE690EB2678D87E17C'
+login_data = {
+    "loginName":"shujujiankong",
+    "password":"Hope@123",
+}
+
+def crawler():
+    crawler_url='http://10.4.0.31/operate/wbps/xinWeiQuery/gehuanjie/gehuanjieInitByCache.do'
+    session= requests.session()
+    result =session.post(crawler_url,data=login_data,headers=header)
+    return  result
+
+
+
+def process():
+    pass
+
+'''
+    filename=datetime.now().date().isoformat()+".xlsx"
+    filepath='D:\crawlerdata\ ' +filename
+    wb=xlrd.open_workbook('D:\crawlerdata\data.xlsx')
+    wb_copy=copy(wb)
+    ws=wb_copy.get_sheet(1)
+    ws.write(0,0,"test")
+    wb_copy.save("D:\crawlerdata\data2.xls")
+   # print(wb.sheet_names())
+'''
+timeformat = '%Y%m%d'
+filename = 'D:\crawlerdata\\' + str(time.strftime(timeformat)) + '.xls'
+
+def excel_write():
+    if  os.path.exists(filename) == False:
+        wb = xlwt.Workbook()
+        ws  = wb.add_sheet('sourcedata')
+        ws.write(0,0,crawler().text)
+        wb.save(filename)
+
+    else:
+        wb = xlrd.open_workbook(filename)
+        row=wb.sheet_by_name('sourcedata').nrows
+        #row=wb.get_sheet(0).nrows
+        wb = copy(wb)
+        ws = wb.get_sheet(0)
+        ws.write(row,0,crawler().text)
+        wb.save(filename)
+
+def txt_write():
+    timeformat = '%Y%m%d%H%M'
+    filename = 'D:\crawlerdata\\' + str(time.strftime(timeformat)) + '.txt'
+    with open(filename,"w") as f:
+            f.write(crawler().text)
+
+
+while 1==1:
+    time.sleep(2)
+    #txt_write()
+    excel_write()
+
+#current_min = time.strftime('%H:$M',time.localtime())
+#print(current_min)
+
+
+
+
+
