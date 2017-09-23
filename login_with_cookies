@@ -1,0 +1,13 @@
+login_url = ''
+session = requests.session()
+result_temp = session.post(login_url,data = login_data,headers=header)
+cookies=result_temp.cookies
+
+
+
+
+r = requests.Session().post(url,params)
+#在利用登录后的cookies进行get内容操作
+r = requests.Session().get('http://pythonscraping.com/pages/cookies/profile.php',cookies = r.cookies)
+print r.text
+
