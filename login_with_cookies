@@ -11,3 +11,12 @@ r = requests.Session().post(url,params)
 r = requests.Session().get('http://pythonscraping.com/pages/cookies/profile.php',cookies = r.cookies)
 print r.text
 
+url = 'http://pythonscraping.com/pages/cookies/welcome.php'
+#构造表单params
+params = {'username': 'mrlevo', 'password': 'password'}
+#先进行提交表单，填充账号密码
+r = requests.post('http://pythonscraping.com/pages/cookies/welcome.php',params) 
+#在利用登录后的cookies进行get内容操作
+r = requests.get('http://pythonscraping.com/pages/cookies/profile.php',cookies = r.cookies)
+print r.text
+
