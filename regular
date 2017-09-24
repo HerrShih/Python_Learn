@@ -912,55 +912,44 @@ text = '''{
 }
 '''
 
-pattern_wx_shouli = r'6001.{15,25}工单受理",\n(.*?)"c'
-wx_shouli = str(re.findall(pattern_wx_shouli, text, re.S))
-wx_jinjian = re.findall(r'acceptCount":\s(\d*),', wx_shouli)
-wx_jinjian = list(map(int, wx_jinjian))
-if len(wx_jinjian) == 0:
+pattern_wx_shouli = r'6001.{15,25}工单受理.*?acceptCount":\s(\d*),'
+wx_jinjian = re.findall(pattern_wx_shouli, text, re.S)
+if len(wx_jinjian) == 0:  #未出现该环节时wx_jinjian取值为空，需设置为0
     wx_jinjian.append(0)
 
-pattern_wx_jianchi = r'6001.{15,25}件池",\n(.*?)"c'
-wx_jianchi = str(re.findall(pattern_wx_jianchi, text, re.S))
-wx_jiya = re.findall(r'HandleCount":\s(\d*),', wx_jianchi)
-wx_jiya = list(map(int, wx_jiya))
+pattern_wx_jianchi = r'6001.{15,25}件池.*?HandleCount":\s(\d*),'
+wx_jiya = re.findall(pattern_wx_jianchi, text, re.S)
 if len(wx_jiya) == 0:
     wx_jiya.append(0)
 
-pattern_wx_yizhanshi = r'6001.{15,25}一站式",\n(.*?)"c'
-wx_yizhanshi = str(re.findall(pattern_wx_yizhanshi, text, re.S))
-wx_rengong = re.findall(r'handleCount":\s(\d*),', wx_yizhanshi)
-wx_rengong = list(map(int, wx_rengong))
+pattern_wx_yizhanshi = r'6001.{15,25}一站式.*?handleCount":\s(\d*),'
+wx_rengong = re.findall(pattern_wx_yizhanshi, text, re.S)
 if len(wx_rengong) == 0:
     wx_rengong.append(0)
 
-pattern_py_shouli = r'6021.{15,25}工单受理",\n(.*?)"c'
-py_shouli = str(re.findall(pattern_py_shouli, text, re.S))
-py_jinjian = re.findall(r'acceptCount":\s(\d*?),', py_shouli)
-py_jinjian = list(map(int, py_jinjian))
+pattern_py_shouli = r'6021.{15,25}工单受理.*?acceptCount":\s(\d*?),'
+py_jinjian = re.findall(pattern_py_shouli, text, re.S)
 if len(py_jinjian) == 0:
     py_jinjian.append(0)
 
-pattern_py_jianchi = r'6021.{15,25}件池",\n(.*?)"c'
-py_jianchi = str(re.findall(pattern_py_jianchi, text, re.S))
-py_jiya = re.findall(r'HandleCount":\s(\d*),', py_jianchi)
-py_jiya = list(map(int, py_jiya))
+pattern_py_jianchi = r'6021.{15,25}件池.*?HandleCount":\s(\d*),'
+py_jiya = re.findall(pattern_py_jianchi, text, re.S)
 if len(py_jiya) == 0:
     py_jiya.append(0)
 
-pattern_py_yizhanshi = r'6021.{15,25}一站式",\n(.*?)"c'
-py_yizhanshi = str(re.findall(pattern_py_yizhanshi, text, re.S))
-py_rengong = re.findall(r'handleCount":\s(\d*),', py_yizhanshi)
-py_rengong = list(map(int, py_rengong))
+pattern_py_yizhanshi = r'6021.{15,25}一站式.*?handleCount":\s(\d*),'
+py_rengong = re.findall(pattern_py_yizhanshi, text, re.S)
 if len(py_rengong) == 0:
     py_rengong.append(0)
 
 wx_data = wx_jinjian + wx_rengong + wx_jiya
+wx_data = list(map(int, wx_data))
 py_data = py_jinjian + py_rengong + py_jiya
+py_data = list(map(int, py_data))
 total_data = [a + b for a, b in zip(wx_data, py_data)]
 current_min = time.strftime('%H:%M')
 total_data.insert(0, current_min)
 
 
 print(total_data)
-
 
