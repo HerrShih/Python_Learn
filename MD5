@@ -20,7 +20,7 @@ def md5(str):
     m=hashlib.md5(str.encode("utf8"))
     return m.hexdigest()
 def getfname():
-    fname = filedialog.askopenfilename()
+    fname = filedialog.askopenfilename(filetypes=[("xls","*.xls"),("xlsx","*xlsx")])
     return fname
 
 def getmd5():
@@ -47,7 +47,7 @@ def getmd5():
 
 
 Button(f1,text='选择文件',command=getfname).pack(side=LEFT)
-Label(f1,text=fname).pack(side=RIGHT)
+#Label(f1,text=fname).pack(side=RIGHT)
 Button(f2,text='加密',command=getmd5).pack(side=LEFT)
 #Button(root,text='选择文件',width=10,command=getmd5).grid(row=3,column=1,sticky=E,padx=10,pady=5)
 
