@@ -25,7 +25,7 @@ def getfname():
     return fname
 
 def getmd5():
-    wb=xlrd.open_workbook(fname)
+    wb=xlrd.open_workbook(getfname())
     table=wb.sheet_by_index(0)
     transfer_result = []
     for i in range(table.nrows):
