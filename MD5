@@ -10,8 +10,9 @@ import hashlib
 
 root= ttk.Tk()
 root.title('催收失联修复加密')
-f1=Frame(root);f1.pack()
-f2=Frame(root);f2.pack()
+root.geometry('200x120+200+200')
+#f1=Frame(root);f1.pack()
+#f2=Frame(root);f2.pack()
 
 
 #root.withdraw()
@@ -46,10 +47,10 @@ def getmd5():
     return
 
 
-Button(f1,text='选择文件',command=getfname).pack(side=LEFT)
+#Button(f,text='选择文件',command=getfname).pack(side=LEFT)
 #Label(f1,text=fname).pack(side=RIGHT)
-Button(f2,text='加密',command=getmd5).pack(side=LEFT)
-#Button(root,text='选择文件',width=10,command=getmd5).grid(row=3,column=1,sticky=E,padx=10,pady=5)
+#Button(f2,text='加密',command=getmd5).pack(side=LEFT)
+Button(root,text='选择文件',width=10,command=getmd5).grid(row=10,column=5,sticky=E,padx=10,pady=5)
 
 mainloop()
 
