@@ -9,18 +9,24 @@ import xlwt
 import hashlib
 
 root= ttk.Tk()
+root.title('催收失联修复加密')
+f1=Frame(root);f1.pack()
+f2=Frame(root);f2.pack()
+
+
 #root.withdraw()
 
 def md5(str):
     m=hashlib.md5(str.encode("utf8"))
     return m.hexdigest()
-
+def getfname():
+    fname = filedialog.askopenfilename()
+    return fname
 
 def getmd5():
-    fname=filedialog.askopenfilename()
-    print(fname)
     wb=xlrd.open_workbook(fname)
     table=wb.sheet_by_index(0)
+    transfer_result = []
     for i in range(table.nrows):
         result=table.row_values(i)
         item=result.pop(0)
@@ -31,15 +37,19 @@ def getmd5():
         result.insert(1,num)
         result=map(str,result)
         result=','.join(result)
-        print(result)
-        f = open('/Users/Neo/Desktop/practice/test.txt', 'w')
-        f.write(result + '\n')
+        #print(result)
+        transfer_result.append(result)
+    f = open('/Users/Neo/Desktop/practice/test.txt', 'w')
+    for i in range(len(transfer_result)):
+        f.write(transfer_result[i] + '\n')
+        print(transfer_result[i] + '\n')
+    return
 
-    return result
 
-
-
-Button(root,text='选择文件',width=10,command=getmd5()).grid(row=3,column=1,sticky=E,padx=10,pady=5)
+Button(f1,text='选择文件',command=getfname).pack(side=LEFT)
+Label(f1,text=fname).pack(side=RIGHT)
+Button(f2,text='加密',command=getmd5).pack(side=LEFT)
+#Button(root,text='选择文件',width=10,command=getmd5).grid(row=3,column=1,sticky=E,padx=10,pady=5)
 
 mainloop()
 
